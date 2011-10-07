@@ -16,3 +16,4 @@ To install tox, run:
 
     $ pip install tox
 
+Note: if you don't have pythonX.Y in your path then just remove pyXY from the tox.ini.

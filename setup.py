@@ -1,3 +1,3 @@
 from distutils.core import setup
 
-setup(name='print_empty_lines_threading')
+setup(name='test_thread_print')
