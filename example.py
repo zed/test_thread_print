@@ -2,6 +2,7 @@
 
    $ while ! python example.py 2>&1|tee out|grep '^$';do echo -n .;done;cat out
 """
+from __future__ import print_function
 import random, sys, time
 import threading
 
