@@ -11,6 +11,7 @@ def echo(s):
     time.sleep(1e-3*random.random())
     with lock:
         print(s)
+        sys.stdout.flush()
 
 for c in 'abc':
     threading.Thread(target=echo, args=(c,)).start()
