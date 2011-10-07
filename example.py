@@ -9,9 +9,13 @@ lock = threading.Lock()
 
 def echo(s):
     time.sleep(1e-3*random.random())
-    with lock:
+
+    lock.acquire()
+    try: 
         print(s)
         sys.stdout.flush()
+    finally:
+        lock.release()
 
 for c in 'abc':
     threading.Thread(target=echo, args=(c,)).start()
