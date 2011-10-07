@@ -14,5 +14,5 @@ def echo(s):
     finally:
         lock.release()
 
-for c in 'abc':
+for c in ['abc'*10**6]*3:
     threading.Thread(target=echo, args=(c,)).start()
