@@ -9,12 +9,16 @@ lock = threading.Lock()
 
 def echo(s):
     time.sleep(1e-3*random.random())
-    with lock:
+    lock.acquire()
+    try: 
         if isinstance(s, int): # py3k
-            sys.stdout.buffer.write(bytes(s))
+            sys.stdout.write(chr(s))
         else:
             sys.stdout.write(s)
-        sys.stdout.flush()
+        sys.stdout.write('\n')
+    finally:
+        lock.release()
+
 
 for c in 'abc'.encode('ascii'):
     threading.Thread(target=echo, args=(c,)).start()
