@@ -11,12 +11,7 @@ lock = threading.Lock()
 def echo(s):
     time.sleep(1e-3*random.random())
     lock.acquire()
-    try: 
-        if isinstance(s, int): # py3k
-            sys.stdout.write(chr(s))
-        else:
-            sys.stdout.write(s)
-        sys.stdout.write('\n')
+    try: print(s)
     finally:
         lock.release()
 
