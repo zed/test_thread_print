@@ -10,7 +10,7 @@ lock = threading.Lock()
 def echo(s):
     time.sleep(1e-3*random.random())
     lock.acquire()
-    try: print(s)
+    try: print >> sys.stderr, (s)
     finally:
         lock.release()
 
