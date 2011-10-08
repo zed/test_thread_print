@@ -3,25 +3,29 @@
 
   $ while ! python example.py 2>&1|tee out|grep '^$';do echo -n .;done;cat out'
 """
-import os, signal, sys
+import sys
 import time
 from subprocess import Popen
-from timeit import default_timer as timer 
+from timeit import default_timer as timer
 
 timeout = 30
-cmd = """while ! %(python)s example.py 2>&1|tee out |grep '^$'
+me = time.time()
+cmd = """while [ ! -f exit.%(me)s ] &&
+               ! %(python)s example.py 2>&1|tee out.%(me)s |grep '^$'
 do echo -n .
 done
-cat out
-""" % dict(python=sys.executable)
+cat out.%(me)s && rm out.%(me)s
+[ -f exit.%(me)s ] && rm exit.%(me)s && exit 1 || exit 0
+""" % dict(python=sys.executable, me=me)
 p = Popen(cmd, shell=True)
 
 # kill the process on timeout
 start = timer()
 while p.poll() is None:
     if (timer() -  start) > timeout:
-        os.kill(p.pid, signal.SIGKILL) # compatibility with 2.4
-        os.waitpid(-1, os.WNOHANG)
-        sys.exit(0) # It might be OK
-    time.sleep(.1)
+        # p has no pid on jython so we can't use os.kill()
+        # touch exit.*
+        open('exit.%s' % (me,), 'wb').close()
+        p.wait()
+    time.sleep(1)
 assert p.returncode, "empty line encountered"
