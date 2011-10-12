@@ -14,6 +14,6 @@ def echo(s):
     finally:
         lock.release()
 
-for c in '\t': # works due to `!space()` condition in 
+for c in '\t'*3: # works due to `!space()` condition in
                # http://hg.python.org/cpython/file/2.7/Python/ceval.c#l1775
     threading.Thread(target=echo, args=(c,)).start()
