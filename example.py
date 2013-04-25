@@ -6,15 +6,10 @@ from __future__ import print_function
 import random, sys, time
 import threading
 
-lock = threading.Lock()
-
-def echo(s):
+def echo(s, lock=threading.Lock()):
     time.sleep(1e-3*random.random())
-    lock.acquire()
-    try: print(s)
-    finally:
-        lock.release()
+    with lock: # comment it out, and run tox to detect error
+        print(s)
 
-
-for c in 'abc'.encode('ascii'):
+for c in ['a b c '*10]*200:
     threading.Thread(target=echo, args=(c,)).start()
